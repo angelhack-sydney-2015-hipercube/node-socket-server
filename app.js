@@ -15,7 +15,7 @@ net.createServer(function (socket) {
 
   getAll(socket)
 
-  getSTT()
+  // getSTT()
 
   // Send a nice welcome message and announce
   socket.write("Welcome " + socket.name + "\n");
