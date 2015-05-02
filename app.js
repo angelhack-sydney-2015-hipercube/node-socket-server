@@ -1,4 +1,6 @@
 var net = require('net')
+var cp = require('./cp-api')
+
 // Keep track of the chat clients
 var clients = [];
 
@@ -8,7 +10,9 @@ net.createServer(function (socket) {
   socket.name = socket.remoteAddress + ":" + socket.remotePort
 
   // Put this new client in the list
-  clients.push(socket);
+  clients.push(socket)
+
+  getAll(socket)
 
   // Send a nice welcome message and announce
   socket.write("Welcome " + socket.name + "\n");
@@ -34,6 +38,14 @@ net.createServer(function (socket) {
     });
     // Log it to the server output too
     process.stdout.write(message)
+  }
+
+  function getAll(client){
+    cp.all(function(err, data){
+      if(err) return console.error('err')
+      console.log('client ' + client.name + ' >> getAll')
+      client.write(JSON.stringify(data)+"\n")
+    })
   }
 
 }).listen(3000,"0.0.0.0");
