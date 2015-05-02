@@ -13,7 +13,7 @@ exports.all = function (callback) {
       if(resp.results)
         return callback(null, resp.results.document)
       else
-        return callback(null, {})
+        return callback(null, [])
     }
   })
 };
@@ -28,7 +28,7 @@ exports.obj = function (id, callback) {
       if(resp.results)
         return callback(null, resp.results.document[0])
       else
-        return callback(null, {})
+        return callback(null, null)
     }
   })
 };

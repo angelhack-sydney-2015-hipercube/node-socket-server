@@ -47,7 +47,7 @@ net.createServer(function (socket) {
 
   function getAll(client){
     cp.all(function(err, data){
-      if(err) return console.error('err')
+      if(err) return console.error(err)
       console.log('client ' + client.name + ' >> getAll')
       client.write(JSON.stringify(data)+"\n")
     })
@@ -55,7 +55,7 @@ net.createServer(function (socket) {
 
   function getObj(client, id){
     cp.obj(id, function(err, data){
-      if(err) return console.error('err')
+      if(err) return console.error(err)
       console.log('client ' + client.name + ' >> getObj')
       client.write(JSON.stringify(data))
     })
@@ -63,16 +63,15 @@ net.createServer(function (socket) {
 
   function addObj(client, obj){
     cp.add(obj, function(err, data){
-      if(err) return console.error('err')
+      if(err) return console.error(err)
       console.log('client ' + client.name + ' >> addObj')
-      //client.write(JSON.stringify(data))
       broadcast(JSON.stringify(data),null)
     })
   }
 
   function editObj(client, obj){
     cp.edit(obj, function(err, data){
-      if(err) return console.error('err')
+      if(err) return console.error(err)
       console.log('client ' + client.name + ' >> editObj')
       broadcast(JSON.stringify(data),null)
     })
@@ -80,7 +79,7 @@ net.createServer(function (socket) {
 
   function deleteObj(client, obj){
     cp.delete(obj, function(err, data){
-      if(err) return console.error('err')
+      if(err) return console.error(err)
       console.log('client ' + client.name + ' >> deleteObj')
       broadcast(JSON.stringify(data),null)
     })
@@ -89,4 +88,4 @@ net.createServer(function (socket) {
 }).listen(3000,"0.0.0.0");
 
 // Put a friendly message on the terminal of the server.
-console.log("Chat server running at port 3000\n");
+console.log("Server running at port 3000\n");
