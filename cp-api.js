@@ -1,4 +1,5 @@
 var cps = require('cps-api')
+var crypto = require('crypto')
 
 var conn = new cps.Connection('tcp://cloud-us-0.clusterpoint.com:9007', 'docs', 'luigibertaco@gmail.com', 'unsecurePass123', 'document', '//document/id', {account: 100091});
 
