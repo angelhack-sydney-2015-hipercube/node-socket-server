@@ -1,6 +1,6 @@
 var net = require('net')
 var cp = require('./cp-api')
-var http = require('http')
+var http = require('https')
 
 // Keep track of the chat clients
 var clients = [];
@@ -14,6 +14,8 @@ net.createServer(function (socket) {
   clients.push(socket)
 
   getAll(socket)
+
+  getSTT()
 
   // Send a nice welcome message and announce
   socket.write("Welcome " + socket.name + "\n");
@@ -50,51 +52,78 @@ net.createServer(function (socket) {
 
   function getAll(client){
     cp.all(function(err, data){
-      if(err) return console.error('err')
-      console.log('client ' + client.name + ' >> getAll')
+      if(err) return console.error(err)
+      console.log('client ' + client.name + ' >> getAll\n')
       client.write(JSON.stringify(data)+"\n")
     })
   }
 
   function getObj(client, id){
     cp.obj(id, function(err, data){
-      if(err) return console.error('err')
-      console.log('client ' + client.name + ' >> getObj')
+      if(err) return console.error(err)
+      console.log('client ' + client.name + ' >> getObj\n')
       client.write(JSON.stringify(data))
     })
   }
 
   function addObj(client, obj){
     cp.add(obj, function(err, data){
-      if(err) return console.error('err')
-      console.log('client ' + client.name + ' >> addObj')
+      if(err) return console.error(err)
+      console.log('client ' + client.name + ' >> addObj\n')
       broadcast(JSON.stringify(data),null)
     })
   }
 
   function editObj(client, obj){
     cp.edit(obj, function(err, data){
-      if(err) return console.error('err')
-      console.log('client ' + client.name + ' >> editObj')
+      if(err) return console.error(err)
+      console.log('client ' + client.name + ' >> editObj\n')
       broadcast(JSON.stringify(data),null)
     })
   }
 
   function deleteObj(client, obj){
     cp.delete(obj, function(err, data){
-      if(err) return console.error('err')
-      console.log('client ' + client.name + ' >> deleteObj')
+      if(err) return console.error(err)
+      console.log('client ' + client.name + ' >> deleteObj\n')
       broadcast(JSON.stringify(data),null)
     })
   }
 
-  function getSTT(obj){
-    while(obj.HP_API_JOB){
-      http.get
-    }
-  }
-
 }).listen(3000,"0.0.0.0");
+
+// cp.all(function(err, data){
+//   if(err) return console.error(err)
+//   console.log(JSON.stringify(data)+"\n")
+//   var arr = JSON.stringify(data)
+//   for(var i = 0; i <= arr.length; i++){
+//     if(arr[i].HPjobID){
+//       http.get('https://api.idolondemand.com/1/job/status/usw3p_d4b18e35-1de5-4cfb-a9ab-1e9e62462d3e?apikey=c1333e51-2dc5-4cc3-907a-c49490941706',function(response){
+//         response.setEncoding('utf8');
+//         response.on('data', function(data){
+//           console.log(data);
+//         });
+//       })
+//     }
+//   }
+// })
+
+// function getSTT(){
+  // cp.all(function(err, data){
+  //   if(err) return console.error('err')
+  //   var arr = JSON.stringfy(data);
+    // for(var i = 0; i <= arr.length; i++){
+    //   // if(arr[i].HPjobID){
+    //   //   http.get('https://api.idolondemand.com/1/job/status/usw3p_d4b18e35-1de5-4cfb-a9ab-1e9e62462d3e?apikey=c1333e51-2dc5-4cc3-907a-c49490941706',function(response){
+    //   //     response.setEncoding('utf8');
+    //   //     response.on('data', function(data){
+    //   //       console.log(data);
+    //   //     });
+    //   //   })
+    //   // }
+    // }
+  // })
+//}
 
 // Put a friendly message on the terminal of the server.
 console.log("Server running at port 3000\n");
