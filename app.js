@@ -14,8 +14,6 @@ net.createServer(function (socket) {
   socket.write("Welcome " + socket.name + "\n");
   broadcast(socket.name + " joined the chat\n", socket);
 
-  getAll(socket)
-
   // Handle incoming messages from clients.
   socket.on('data', function (data) {
     broadcast(socket.name + ' >> ' + data + '\n', socket)
