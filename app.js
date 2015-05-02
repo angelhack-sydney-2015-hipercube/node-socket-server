@@ -27,6 +27,17 @@ net.createServer(function (socket) {
     broadcast(socket.name + " left the chat!!!\n");
   });
 
+  // Send a message to all clients
+  function broadcast(message, sender) {
+    clients.forEach(function (client) {
+      // Don't want to send it to sender
+      if (client === sender) return;
+      client.write(message);
+    });
+    // Log it to the server output too
+    process.stdout.write(message)
+  }
+
 }).listen(3000,"0.0.0.0");
 
 // Put a friendly message on the terminal of the server.
