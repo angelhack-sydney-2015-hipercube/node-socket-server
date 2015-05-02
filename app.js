@@ -1,5 +1,6 @@
 var net = require('net')
 var cp = require('./cp-api')
+var http = require('http')
 
 // Keep track of the chat clients
 var clients = [];
@@ -20,12 +21,14 @@ net.createServer(function (socket) {
 
   // Handle incoming messages from clients.
   socket.on('data', function (data) {
-    var req = JSON.parse(data)
-    if(req.request == 'list')   getAll(socket)
-    if(req.request == 'get')    getObj(socket, req.id)
-    if(req.request == 'add')    addObj(socket, req.obj)
-    if(req.request == 'edit')   editObj(socket, req.obj)
-    if(req.request == 'delete') deleteObj(socket, req.obj)
+    if(req = JSON.parse(data)){
+      if(req.request == 'list')   return getAll(socket)
+      if(req.request == 'get')    return getObj(socket, req.id)
+      if(req.request == 'add')    return addObj(socket, req.obj)
+      if(req.request == 'edit')   return editObj(socket, req.obj)
+      if(req.request == 'delete') return deleteObj(socket, req.obj)
+    }
+    //broadcast(socket.name + " >> " + data + "\n");
   });
 
   // Remove the client from the list when it leaves
@@ -47,7 +50,7 @@ net.createServer(function (socket) {
 
   function getAll(client){
     cp.all(function(err, data){
-      if(err) return console.error(err)
+      if(err) return console.error('err')
       console.log('client ' + client.name + ' >> getAll')
       client.write(JSON.stringify(data)+"\n")
     })
@@ -55,7 +58,7 @@ net.createServer(function (socket) {
 
   function getObj(client, id){
     cp.obj(id, function(err, data){
-      if(err) return console.error(err)
+      if(err) return console.error('err')
       console.log('client ' + client.name + ' >> getObj')
       client.write(JSON.stringify(data))
     })
@@ -63,7 +66,7 @@ net.createServer(function (socket) {
 
   function addObj(client, obj){
     cp.add(obj, function(err, data){
-      if(err) return console.error(err)
+      if(err) return console.error('err')
       console.log('client ' + client.name + ' >> addObj')
       broadcast(JSON.stringify(data),null)
     })
@@ -71,7 +74,7 @@ net.createServer(function (socket) {
 
   function editObj(client, obj){
     cp.edit(obj, function(err, data){
-      if(err) return console.error(err)
+      if(err) return console.error('err')
       console.log('client ' + client.name + ' >> editObj')
       broadcast(JSON.stringify(data),null)
     })
@@ -79,10 +82,16 @@ net.createServer(function (socket) {
 
   function deleteObj(client, obj){
     cp.delete(obj, function(err, data){
-      if(err) return console.error(err)
+      if(err) return console.error('err')
       console.log('client ' + client.name + ' >> deleteObj')
       broadcast(JSON.stringify(data),null)
     })
+  }
+
+  function getSTT(obj){
+    while(obj.HP_API_JOB){
+      http.get
+    }
   }
 
 }).listen(3000,"0.0.0.0");
